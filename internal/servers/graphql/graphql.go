@@ -60,7 +60,7 @@ func (s *Server) Start(ctx context.Context) {
 	go func() {
 		if err := http.ListenAndServe(":"+s.port, nil); err != nil {
 			s.logger.Errorf(ctx, "Failed to start GraphQL server: %v", err)
-			ctx.Done()			
+			ctx.Done()
 		}
 	}()
 }

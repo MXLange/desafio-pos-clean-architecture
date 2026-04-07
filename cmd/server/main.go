@@ -13,6 +13,7 @@ import (
 	"github.com/MXLange/desafio-pos-clean-architecture/internal/infra/db"
 	"github.com/MXLange/desafio-pos-clean-architecture/internal/logger"
 	graphqlserver "github.com/MXLange/desafio-pos-clean-architecture/internal/servers/graphql"
+	grpcserver "github.com/MXLange/desafio-pos-clean-architecture/internal/servers/grpc"
 	"github.com/MXLange/desafio-pos-clean-architecture/internal/servers/rest"
 )
 
@@ -87,6 +88,21 @@ func main() {
 	}
 	graphqlServer.Start(ctx)
 
+	grpcService, err := grpcserver.NewOrderService(createOrderUseCase, listOrdersUseCase)
+	if err != nil {
+		l.Panicf(ctx, "Failed to create gRPC service: %v", err)
+		return
+	}
+	grpcServer, err := grpcserver.NewServer(e.GrpcPort, l, grpcService)
+	if err != nil {
+		l.Panicf(ctx, "Failed to create gRPC server: %v", err)
+		return
+	}
+	if err := grpcServer.Start(ctx); err != nil {
+		l.Panicf(ctx, "Failed to start gRPC server: %v", err)
+		return
+	}
+
 	shutdownCtx, stop := signal.NotifyContext(ctx, syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 
@@ -99,6 +115,9 @@ func main() {
 
 	if err := restServer.Stop(stopCtx); err != nil {
 		l.Errorf(ctx, "Failed to stop REST server: %v", err)
+	}
+	if err := grpcServer.Stop(stopCtx); err != nil {
+		l.Errorf(ctx, "Failed to stop gRPC server: %v", err)
 	}
 
 	l.Info(ctx, "Server stopped")

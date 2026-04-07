@@ -9,6 +9,8 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.19.1
 	github.com/spf13/viper v1.21.0
 	github.com/vektah/gqlparser/v2 v2.5.32
+	google.golang.org/grpc v1.74.2
+	google.golang.org/protobuf v1.36.11
 )
 
 require (
@@ -30,10 +32,12 @@ require (
 	github.com/urfave/cli/v3 v3.7.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/mod v0.33.0 // indirect
+	golang.org/x/net v0.51.0 // indirect
 	golang.org/x/sync v0.20.0 // indirect
 	golang.org/x/sys v0.42.0 // indirect
 	golang.org/x/text v0.34.0 // indirect
 	golang.org/x/tools v0.42.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250818200422-3122310a409c // indirect
 )
 
 tool github.com/99designs/gqlgen

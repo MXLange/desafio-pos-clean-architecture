@@ -1,0 +1,35 @@
+syntax = "proto3";
+package order;
+option go_package = "proto/order";
+
+import "google/protobuf/empty.proto";
+
+// NewOrder represents the data required to create a new order, including product ID and quantity
+message NewOrder {
+  uint64 product_id = 1;
+  uint64 quantity  = 2;
+}
+
+// Order represents an order with a unique ID, associated product ID, and quantity
+message Order {
+  uint64 id        = 1;
+  uint64 product_id = 2;
+  uint64 quantity  = 3;
+}
+
+// OrderList represents a list of orders, containing a repeated field of Order messages
+message OrderList {
+  repeated Order orders = 1;
+}
+
+// OrderService provides operations for managing orders
+service OrderService {
+  // CreateOrder creates a new order based on the provided NewOrder message
+  rpc CreateOrder(NewOrder) returns (Order);
+  // ListOrders retrieves a list of all existing orders
+  rpc ListOrders(google.protobuf.Empty) returns (OrderList);
+}
+
+/*
+protoc --go_out=. --go-grpc_out=. proto/order.proto
+*/

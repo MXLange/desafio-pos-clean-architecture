@@ -37,6 +37,6 @@ func (uc *ListOrdersUseCase) Execute(ctx context.Context) ([]dto.Order, error) {
 		uc.logger.Errorf(ctx, "ListOrdersUseCase - failed to list orders: %v", err)
 		return nil, err
 	}
-	uc.logger.Infof(ctx, "ListOrdersUseCase - orders listed successfully: %v", orders)
+	uc.logger.Infof(ctx, "ListOrdersUseCase - orders listed successfully, total: %v", len(orders))
 	return mapper.EntityListToOrderListResponse(orders), nil
 }
