@@ -1,0 +1,13 @@
+@baseUrl = http://localhost:8080
+
+### Criar pedido
+POST {{baseUrl}}/orders
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "quantity": 2
+}
+
+### Listar pedidos
+GET {{baseUrl}}/orders
