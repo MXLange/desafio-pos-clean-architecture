@@ -3,11 +3,11 @@
 # https://gqlgen.com/getting-started/
 
 type Query {
-    orders: [Order!]!
+    ListOrders: [Order!]!
 }
 
 type Mutation {
-    createOrder(input: NewOrder!): Order!
+    CreateOrder(input: NewOrder!): Order!
 }
 
 type Order {

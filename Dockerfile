@@ -25,4 +25,6 @@ RUN mkdir -p /app/data
 
 VOLUME ["/app/data"]
 
+EXPOSE 8080 8081 50051
+
 CMD ["/bin/sh", "-c", "mkdir -p /app/data/internal/infra/db && cp /app/.env /app/data/.env && rm -rf /app/data/internal/infra/db/migrations && cp -R /app/internal/infra/db/migrations /app/data/internal/infra/db/migrations && cd /app/data && /app/server"]

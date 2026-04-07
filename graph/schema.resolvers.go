@@ -40,8 +40,8 @@ func (r *orderResolver) Quantity(ctx context.Context, obj *dto.Order) (int32, er
 	return int32(obj.Quantity), nil
 }
 
-// Orders is the resolver for the orders field.
-func (r *queryResolver) Orders(ctx context.Context) ([]*dto.Order, error) {
+// ListOrders is the resolver for the ListOrders field.
+func (r *queryResolver) ListOrders(ctx context.Context) ([]*dto.Order, error) {
 	orders, err := r.ListOrdersUseCase.Execute(ctx)
 	if err != nil {
 		return nil, err
@@ -83,18 +83,3 @@ type mutationResolver struct{ *Resolver }
 type orderResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type newOrderResolver struct{ *Resolver }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//    it when you're done.
-//  - You have helper methods in this file. Move them out to keep these resolver files clean.
-/*
-	func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
-}
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: Todos - todos"))
-}
-*/

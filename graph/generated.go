@@ -49,7 +49,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Orders func(childComplexity int) int
+		ListOrders func(childComplexity int) int
 	}
 }
 
@@ -62,7 +62,7 @@ type OrderResolver interface {
 	Quantity(ctx context.Context, obj *dto.Order) (int32, error)
 }
 type QueryResolver interface {
-	Orders(ctx context.Context) ([]*dto.Order, error)
+	ListOrders(ctx context.Context) ([]*dto.Order, error)
 }
 
 type NewOrderResolver interface {
@@ -84,12 +84,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 	_ = ec
 	switch typeName + "." + field {
 
-	case "Mutation.createOrder":
+	case "Mutation.CreateOrder":
 		if e.ComplexityRoot.Mutation.CreateOrder == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_createOrder_args(ctx, rawArgs)
+		args, err := ec.field_Mutation_CreateOrder_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
@@ -115,12 +115,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Order.Quantity(childComplexity), true
 
-	case "Query.orders":
-		if e.ComplexityRoot.Query.Orders == nil {
+	case "Query.ListOrders":
+		if e.ComplexityRoot.Query.ListOrders == nil {
 			break
 		}
 
-		return e.ComplexityRoot.Query.Orders(childComplexity), true
+		return e.ComplexityRoot.Query.ListOrders(childComplexity), true
 
 	}
 	return 0, false
@@ -225,7 +225,7 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
 // region    ***************************** args.gotpl *****************************
 
-func (ec *executionContext) field_Mutation_createOrder_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+func (ec *executionContext) field_Mutation_CreateOrder_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNNewOrder2githubᚗcomᚋMXLangeᚋdesafioᚑposᚑcleanᚑarchitectureᚋinternalᚋdomainᚋorderᚋdtoᚐOrderCreateRequest)
@@ -299,12 +299,12 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _Mutation_createOrder(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Mutation_CreateOrder(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_Mutation_createOrder,
+		ec.fieldContext_Mutation_CreateOrder,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
 			return ec.Resolvers.Mutation().CreateOrder(ctx, fc.Args["input"].(dto.OrderCreateRequest))
@@ -316,7 +316,7 @@ func (ec *executionContext) _Mutation_createOrder(ctx context.Context, field gra
 	)
 }
 
-func (ec *executionContext) fieldContext_Mutation_createOrder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_CreateOrder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -341,7 +341,7 @@ func (ec *executionContext) fieldContext_Mutation_createOrder(ctx context.Contex
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createOrder_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_CreateOrder_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -435,14 +435,14 @@ func (ec *executionContext) fieldContext_Order_quantity(_ context.Context, field
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_orders(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Query_ListOrders(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_Query_orders,
+		ec.fieldContext_Query_ListOrders,
 		func(ctx context.Context) (any, error) {
-			return ec.Resolvers.Query().Orders(ctx)
+			return ec.Resolvers.Query().ListOrders(ctx)
 		},
 		nil,
 		ec.marshalNOrder2ᚕᚖgithubᚗcomᚋMXLangeᚋdesafioᚑposᚑcleanᚑarchitectureᚋinternalᚋdomainᚋorderᚋdtoᚐOrderᚄ,
@@ -451,7 +451,7 @@ func (ec *executionContext) _Query_orders(ctx context.Context, field graphql.Col
 	)
 }
 
-func (ec *executionContext) fieldContext_Query_orders(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_ListOrders(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -2094,9 +2094,9 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Mutation")
-		case "createOrder":
+		case "CreateOrder":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createOrder(ctx, field)
+				return ec._Mutation_CreateOrder(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -2285,7 +2285,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
-		case "orders":
+		case "ListOrders":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -2294,7 +2294,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_orders(ctx, field)
+				res = ec._Query_ListOrders(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}

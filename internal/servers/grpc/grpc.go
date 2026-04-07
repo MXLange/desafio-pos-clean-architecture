@@ -8,6 +8,7 @@ import (
 	"github.com/MXLange/desafio-pos-clean-architecture/internal/logger"
 	orderpb "github.com/MXLange/desafio-pos-clean-architecture/proto/order"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 type Server struct {
@@ -42,6 +43,7 @@ func (s *Server) Start(ctx context.Context) error {
 	s.lis = lis
 	s.server = grpc.NewServer()
 	orderpb.RegisterOrderServiceServer(s.server, s.service)
+	reflection.Register(s.server)
 
 	s.logger.Infof(ctx, "Starting gRPC server on port %s", s.port)
 
