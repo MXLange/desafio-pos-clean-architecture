@@ -7,10 +7,12 @@ import (
 	"time"
 
 	"github.com/MXLange/desafio-pos-clean-architecture/env"
+	"github.com/MXLange/desafio-pos-clean-architecture/graph"
 	"github.com/MXLange/desafio-pos-clean-architecture/internal/domain/order/repository"
 	usecases "github.com/MXLange/desafio-pos-clean-architecture/internal/domain/order/use_cases"
 	"github.com/MXLange/desafio-pos-clean-architecture/internal/infra/db"
 	"github.com/MXLange/desafio-pos-clean-architecture/internal/logger"
+	graphqlserver "github.com/MXLange/desafio-pos-clean-architecture/internal/servers/graphql"
 	"github.com/MXLange/desafio-pos-clean-architecture/internal/servers/rest"
 )
 
@@ -57,6 +59,12 @@ func main() {
 		return
 	}
 
+	graphResolver, err := graph.NewResolver(createOrderUseCase, listOrdersUseCase)
+	if err != nil {
+		l.Panicf(ctx, "Failed to create GraphQL resolver: %v", err)
+		return
+	}
+
 	handlers, err := rest.NewHandler(createOrderUseCase, listOrdersUseCase)
 	if err != nil {
 		l.Panicf(ctx, "Failed to create handlers: %v", err)
@@ -71,6 +79,13 @@ func main() {
 		l.Panicf(ctx, "Failed to start REST server: %v", err)
 		return
 	}
+
+	graphqlServer, err := graphqlserver.NewServer(e.GraphQLPort, l, graphResolver)
+	if err != nil {
+		l.Panicf(ctx, "Failed to create GraphQL server: %v", err)
+		return
+	}
+	graphqlServer.Start(ctx)
 
 	shutdownCtx, stop := signal.NotifyContext(ctx, syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
